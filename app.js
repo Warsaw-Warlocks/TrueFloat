@@ -3,23 +3,37 @@
 var hello = 12;
 
 function TF(number) {
-    // solution 1
-    // let numArray = number.toString().split(".");
-    // let leftSide = parseInt(numArray[0]);
-    // let rightSide = parseInt(numArray[1]);
 
+    if (typeof number !== 'number') {
+        return {
+            ...number,
+        }
+    }
+    const numArray = number.toString().split(".");
+    const leftSide = parseInt(numArray[0], 10);
+    const rightSide = parseInt(numArray[1], 10) || 0;
+    const power = Math.pow(10, numArray[1] ? numArray[1].length : 0)
 
-    // solution 2 - LOL
-    let leftSide = Math.floor(number);
-    let abs = Math.abs(number);
-    let rightSide = abs - Math.floor(abs);
-    
-    
-
-    console.log('number', number);
-    console.log('leftSide', leftSide);
-    console.log('rightSide', rightSide);
-
+    return {
+        leftSide,
+        rightSide,
+        power,
+    }
 }
 
-TF(13.3);
+function addTF(num1, num2) {
+    const leftSide = num1.leftSide + num2.leftSide;
+    const power = num1.power * num2.power;
+    const rightSide = num1.rightSide * num2.power + num2.rightSide * num1.power;
+
+    return new TF({
+        leftSide,
+        rightSide,
+        power,
+    })
+}
+
+let num1 = new TF(13);
+let num2 = new TF(9.0003005);
+let num3 = addTF(num1, num2);
+console.log(num1, num2, num3);
