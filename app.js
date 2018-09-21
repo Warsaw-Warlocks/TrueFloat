@@ -11,7 +11,8 @@ function TF(number) {
     const numArray = number.toString().split(".");
     const leftSide = parseInt(numArray[0], 10);
     const rightSide = parseInt(numArray[1], 10) || 0;
-    const power = Math.pow(10, numArray[1] ? numArray[1].length : 0)
+    const length = numArray[1] ? numArray[1].length : 0;
+    const power = Math.pow(10, length);
 
     return {
         leftSide,
@@ -21,50 +22,52 @@ function TF(number) {
 }
 
 function addTF(num1, num2) {
-    const leftSide = num1.leftSide + num2.leftSide;
-    const power = num1.power * num2.power;
-    const rightSide = num1.rightSide * num2.power + num2.rightSide * num1.power;
+    let leftSide = num1.leftSide + num2.leftSide;
+    let power = num1.power * num2.power;
+    let rightSide = num1.rightSide * num2.power + num2.rightSide * num1.power;
+
+    //QUESTION: any better way to do IF below?
+
+    const rss = rightSide.toString();
+    const pws = power.toString();
+    if (rss.length >= pws.length) {
+        let l = rss.length - pws.length + 1;
+        leftSide = leftSide + parseInt(rss.slice(0, l));
+        rightSide = parseInt(rss.slice(l, rss.length));
+    }
+
+    //TODO: remove trailing 0 from rightSide and decres power accordingly
+
+    if (rightSide === 0) power = 10;
 
     return new TF({
         leftSide,
         rightSide,
         power,
     })
+}
+
+function addArrayTF(numArray) {
+    return numArray.reduce(function(previousValue, currentValue) {
+        return addTF(previousValue, currentValue);
+    });
 }
 
 function multiplyTF(num1, num2) {
-    // const leftSide = num1.leftSide * num2.leftSide;
-    const power = num1.power * num2.power;
-    // // const rightSide = num1.rightSide * num2.power * num2.rightSide * num1.power;
-    // const rightSide = num1.rightSide * num2.rightSide;
-
-    const temp1 = num1.leftSide * num2.leftSide;
-    const temp2 = num1.rightSide / num2.power * num2.leftSide;
-    const temp3 = num1.leftSide * num2.rightSide / num1.power;
-    const temp4 = num1.rightSide / num2.power * num2.rightSide / num1.power;
-
-    const temp1A = temp1.toString().split(".");
-    const temp2A = temp2.toString().split(".");
-    const temp3A = temp3.toString().split(".");
-    const temp4A = temp4.toString().split(".");
-
-    const leftSide = (parseInt(temp1A[0]) + parseInt(temp2A[0]) + parseInt(temp3A[0]) + parseInt(temp4A[0]));
-    const rightSide = (parseInt((temp1A[1] || "0") + parseInt(temp2A[1]) + parseInt(temp3A[1]) + parseInt(temp4A[1])));
-
-    console.log(temp1, temp2, temp3, temp4);
-    console.log(temp1A, temp2A, temp3A, temp4A);
-    console.log(leftSide, rightSide);
-
-    return new TF({
-        leftSide,
-        rightSide,
-        power,
-    })
+    return addArrayTF([
+        new TF(num1.leftSide * num2.leftSide),
+        new TF(num1.rightSide / num2.power * num2.leftSide),
+        new TF(num1.leftSide * num2.rightSide / num1.power),
+        new TF(num1.rightSide / num2.power * num2.rightSide / num1.power),
+    ]);
 }
 
 let num1 = new TF(1.5);
-let num2 = new TF(1.5);
-let num3 = addTF(num1, num2);
-let num4 = multiplyTF(num1, num2);
-// console.log(num1, num2, num3);
-console.log(num1, num2, num4);
+let num2 = new TF(0.5);
+
+let num3 = new TF(1.5);
+let num4 = new TF(1.5);
+// let numAdd = addTF(num1, num2);
+let numMul = multiplyTF(num3, num4);
+// console.log(num1, num2, numAdd);
+console.log(num3, num4, numMul);
