@@ -30,15 +30,18 @@ function addTF(num1, num2) {
 
     const rss = rightSide.toString();
     const pws = power.toString();
-    if (rss.length >= pws.length) {
+    if (rightSide === 0) {
+        power = 10;
+    } else if (rss.length >= pws.length) {
         let l = rss.length - pws.length + 1;
         leftSide = leftSide + parseInt(rss.slice(0, l));
-        rightSide = parseInt(rss.slice(l, rss.length));
+        rightSide = parseInt(rss.slice(l, rss.length-1));
     }
-
-    //TODO: remove trailing 0 from rightSide and decres power accordingly
-
-    if (rightSide === 0) power = 10;
+    //TODO/DONE?: remove trailing 0 from rightSide and decres power accordingly
+    let temp = parseInt(rightSide.toString().split("").reverse().join("")).toString().split("").reverse().join("");
+    let tempLength = rightSide.toString().length - temp.length;
+    rightSide = parseInt(temp);
+    power = power/Math.pow(10, tempLength);
 
     return new TF({
         leftSide,
@@ -66,9 +69,9 @@ let num1 = new TF(1.5);
 let num2 = new TF(0.5);
 
 let num3 = new TF(1.5);
-let num4 = new TF(1.5);
+let num4 = new TF(0.5);
 // let numAdd = addTF(num1, num2);
-let numAdd = addArrayTF([num1, num2, num3]);
-// let numMul = multiplyTF(num3, num4);
-console.log(num1, num2, num3, numAdd);
-// console.log(num3, num4, numMul);
+// let numAdd = addArrayTF([num1, num2, num3]);
+let numMul = multiplyTF(num3, num4);
+// console.log(num1, num2, num3, numAdd);
+console.log(num3, num4, numMul);
