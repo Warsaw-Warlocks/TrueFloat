@@ -42,6 +42,7 @@ class TF {
     get toFloat(){
         return parseFloat(this.toString)
     }
+    
 }
 
 function addTwo(num1,num2){
@@ -68,8 +69,9 @@ function multiplyTwoTF(num1,power1, num2, power2){
     const tempPower = power1+power2;
     const tempLength = tempValue.toString().length;
     tempValue= tempValue.toString().split('');
-    const leftSide = Math.max(0,tempLength-tempPower)>0 ? parseInt(tempValue.splice(0,Math.max(0,tempLength-tempPower)).join('')) : 0;
-    const rightSide = tempValue.length>0 ? parseInt(tempValue) : 0;
+    const diff= Math.max(0,tempLength-tempPower);
+    const leftSide = diff>0 ? parseInt(tempValue.splice(0,diff).join('')) : 0;
+    const rightSide = tempValue.length>0 ? parseInt(tempValue.join('')) : 0;
     return new TF({leftSide,rightSide, power: tempPower})
 }
 
@@ -80,6 +82,7 @@ function multiplyTF(num1, num2){
         multiplyTwoTF(num1.rightSide,num1.power, num2.leftSide, 0),
         multiplyTwoTF(num1.rightSide,num1.power, num2.rightSide, num2.power),
     ]
+    console.log(temp)
     return  addTF(temp)
 
 }
@@ -90,12 +93,9 @@ function addTF(numbers){
     }
     return temp
 }
-// console.log
-// console.log(TF(9.00000030000034))
-const a1 = new TF(33.3)
-const a2 = new TF(2.1);
 
-// console.log (addTwo(abcd ,new TF(1.1)));
-// console.log(abcd.countPower)
+const a1 = new TF(0.5)
+const a2 = new TF(25);
 const multiply = multiplyTF(a1 , a2);
 console.log(multiply)
+
