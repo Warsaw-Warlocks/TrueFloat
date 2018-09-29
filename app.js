@@ -51,6 +51,7 @@ function addTF(num1, num2) {
 }
 
 function addArrayTF(numArray) {
+    console.log('numArray :', numArray);
     return numArray.reduce(function(previousValue, currentValue) {
         return addTF(previousValue, currentValue);
     });
@@ -65,13 +66,13 @@ function multiplyTF(num1, num2) {
     ]);
 }
 
-let num1 = new TF(1.5);
-let num2 = new TF(0.5);
+let num1 = new TF(1.05);
+let num2 = new TF(1.05);
 
-let num3 = new TF(1.5);
-let num4 = new TF(0.5);
+let num3 = new TF(1.05);
+let num4 = new TF(1.05);
 // let numAdd = addTF(num1, num2);
-// let numAdd = addArrayTF([num1, num2, num3]);
-let numMul = multiplyTF(num3, num4);
-// console.log(num1, num2, num3, numAdd);
-console.log(num3, num4, numMul);
+let numAdd = addArrayTF([num1, num2, num3]);
+// let numMul = multiplyTF(num3, num4);
+console.log(num1, num2, num3, numAdd);
+// console.log(num3, num4, numMul);
